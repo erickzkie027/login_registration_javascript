@@ -29,7 +29,7 @@ pipeline {
                     echo "staging_env is ${staging_env}"
                   
 
-                    withCredentials([sshUserPrivateKey(credentialsId: "sshadmin", keyFileVariable: 'SSH_KEY')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: "ssh-jenkins", keyFileVariable: 'SSH_KEY')]) {
                         def remote = [
                             name: 'ubuntu',
                             port: 22,
