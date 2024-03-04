@@ -18,7 +18,7 @@ class UserModel {
 
         return response_data;
     }
-
+    // test
     createUser = async (user_data) => {
         let response_data = { status: false, result: {}, error: null };
 
