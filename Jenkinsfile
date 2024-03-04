@@ -29,7 +29,7 @@ pipeline {
                     echo "staging_env is ${staging_env}"
                   
 
-                    withCredentials([sshUserPrivateKey(credentialsId: "sshadmin", keyFileVariable: 'SSH_KEY')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: "ssh-jenkins", keyFileVariable: 'SSH_KEY')]) {
                         def remote = [
                             name: 'ubuntu',
                             port: 22,
@@ -43,14 +43,6 @@ pipeline {
                         sshCommand remote: remote, command: "cd ${directory} && sudo git fetch"
                         sshCommand remote: remote, command: "cd ${directory} && sudo git checkout ${sourceBranch}"
                         sshCommand remote: remote, command: "cd ${directory} && sudo git pull origin ${sourceBranch}"
-
-                        withCredentials([file(credentialsId: staging_env, variable: 'yaml_file')]) {
-                            sh 'mv \$yaml_file ./configs'
-                            sshPut remote: remote, from: "./configs/sample.env.yml", into: "/var/www/tmp_server_files/"
-                        }
-
-                        sshCommand remote: remote, command: "sudo rm -rf ${directory}/configs/sample.env.yml"
-                        sshCommand remote: remote, command: "sudo mv /var/www/tmp_server_files/sample.env.yml ${directory}/configs/"
                     }
 
                     echo currentBuild.result
